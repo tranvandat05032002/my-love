@@ -12,6 +12,13 @@
     box-sizing: border-box;
 }
 
+html,
+body,
+#intro-screen,
+#main-screen{
+    height:100dvh;
+}
+
 html, body {
     width: 100%;
     height: 100%;
@@ -120,6 +127,15 @@ body {
     to { opacity: 1; text-shadow: 0 0 15px rgba(255,179,217,0.8); }
 }
 
+#orbit-center{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:0;
+    height:0;
+}
+
 .meteor {
     position: absolute;
     width: 2px;
@@ -215,33 +231,23 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 0; 
+    width: 0;
     height: 0;
-    z-index: 3;
+
     transform-style: preserve-3d;
     pointer-events: none;
-    transform: scale(0.1);
-    transition: transform 2.5s cubic-bezier(0.2, 0.8, 0.2, 1.2);
-}
 
-#main-screen.active #orbit-system {
-    transform: scale(1);
+    transform: translate(-50%, -50%);
 }
 
 .photo-item {
-    position: absolute;
-    /* Tăng kích thước từ 90px lên 130px */
-     width: clamp(70px, 18vw, 130px);
-    height: clamp(70px, 18vw, 130px);
-    margin: calc(clamp(70px, 18vw, 130px) / -2);
-    
-    /* BẮT BUỘC: top và left phải bằng một nửa kích thước và có dấu trừ (-) */
-    border-radius: 18px; /* Tăng bo góc một chút cho hợp kích thước mới */
-    border: 3px solid rgba(255, 255, 255, 0.9);
-    box-shadow: 0 0 25px rgba(255, 50, 100, 0.6), inset 0 0 10px rgba(0,0,0,0.1);
-    background: #fff;
-    backface-visibility: visible; 
-    overflow: hidden;
+    position:absolute;
+
+    width:clamp(70px,18vw,130px);
+    height:clamp(70px,18vw,130px);
+
+    margin-left:-65px;
+    margin-top:-65px;
 }
 
 .photo-item img {
@@ -377,7 +383,9 @@ body {
     <canvas id="particleHeartCanvas"></canvas>
 
     <!-- Quỹ đạo ảnh 3D -->
-    <div id="orbit-system"></div>
+    <div id="orbit-center">
+        <div id="orbit-system"></div>
+    </div>
 
     <!-- Nút Mở Thiệp Gợi Ý -->
     <div id="open-card-btn" onclick="toggleCard()">
@@ -654,7 +662,7 @@ function createOrbitPhotos3D() {
             "image/anh8.jpeg"
         ];
 
-    const radius = window.innerWidth < 768 ? 180 : 320;
+    const radius = Math.min(window.innerWidth, window.innerHeight) * 0.25;
     const golden = Math.PI * (3 - Math.sqrt(5));
 
     photos.forEach((src, i) => {
@@ -760,14 +768,13 @@ function render3DScene() {
 
     const orbit = document.getElementById("orbit-system");
     orbit.style.transform = `
-    translate(-50%, -50%)
-    rotateX(${-currentRotX}rad)
-    rotateY(${currentRotY}rad)
-    `;
+rotateX(${-currentRotX}rad)
+rotateY(${currentRotY}rad)
+`;
 
     ctxHeart.clearRect(0, 0, canvasHeart.width, canvasHeart.height);
-    let centerX = canvasHeart.width / 2;
-    let centerY = canvasHeart.height / 2;
+    let centerX = window.innerWidth / 2;
+    let centerY = window.innerHeight / 2;
 
     // Cập nhật vị trí hạt với hiệu ứng giãn nở theo nhịp đập
     heartParticles.forEach(p => {
