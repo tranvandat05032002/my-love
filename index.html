@@ -62,6 +62,11 @@ canvas {
     text-shadow: 0 0 10px #ff3366, 0 0 20px rgba(255, 51, 102, 0.6);
 }
 
+body {
+    touch-action: none;
+    overscroll-behavior: none;
+}
+
 .heart-wrapper {
     position: relative;
     width: 200px;
@@ -226,13 +231,11 @@ canvas {
 .photo-item {
     position: absolute;
     /* Tăng kích thước từ 90px lên 130px */
-    width: 130px;
-    height: 130px;
+     width: clamp(70px, 18vw, 130px);
+    height: clamp(70px, 18vw, 130px);
+    margin: calc(clamp(70px, 18vw, 130px) / -2);
     
     /* BẮT BUỘC: top và left phải bằng một nửa kích thước và có dấu trừ (-) */
-    top: -65px;  /* (-130 chia 2) */
-    left: -65px; /* (-130 chia 2) */
-    
     border-radius: 18px; /* Tăng bo góc một chút cho hợp kích thước mới */
     border: 3px solid rgba(255, 255, 255, 0.9);
     box-shadow: 0 0 25px rgba(255, 50, 100, 0.6), inset 0 0 10px rgba(0,0,0,0.1);
@@ -548,15 +551,19 @@ const ctxHeart = canvasHeart.getContext("2d");
 let heartParticles = [];
 
 function resizeHeartCanvas() {
-    canvasHeart.width = window.innerWidth;
-    canvasHeart.height = window.innerHeight;
+    const dpr = window.devicePixelRatio || 1;
+
+    canvasHeart.width = window.innerWidth * dpr;
+    canvasHeart.height = window.innerHeight * dpr;
+
+    ctxHeart.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 resizeHeartCanvas();
 window.addEventListener("resize", resizeHeartCanvas);
 
 function initHeartParticles() {
     heartParticles = [];
-    const numParticles = 9500; 
+    const numParticles = window.innerWidth < 768 ? 2500 : 9500;
 
     for (let i = 0; i < numParticles; i++) {
         // Phương trình toán học chuẩn của trái tim Lý Tuân
@@ -634,7 +641,7 @@ function createOrbitPhotos3D() {
             "image/anh8.jpeg"
         ];
 
-    const radius = 320;
+    const radius = window.innerWidth < 768 ? 180 : 320;
     const golden = Math.PI * (3 - Math.sqrt(5));
 
     photos.forEach((src, i) => {
@@ -717,7 +724,8 @@ function render3DScene() {
     if (!document.getElementById("main-screen").classList.contains("active")) {
         requestAnimationFrame(render3DScene);
         
-        if (now - lastTime < 16) return; // ~60fps lock
+       let now = performance.now();
+        if (now - lastTime < 16) return;
         lastTime = now;
 
         return;
