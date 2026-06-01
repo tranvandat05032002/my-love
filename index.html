@@ -243,8 +243,8 @@ body {
 .photo-item {
     position:absolute;
 
-    width:clamp(70px,18vw,130px);
-    height:clamp(70px,18vw,130px);
+    width: clamp(60px,15vw,100px);
+    height: clamp(60px,15vw,100px);
 
     margin-left:-65px;
     margin-top:-65px;
@@ -658,11 +658,14 @@ function createOrbitPhotos3D() {
             "image/anh4.jpeg",
             "image/anh5.jpeg",
             "image/anh6.jpeg",
-            "image/anh7.jpeg",
-            "image/anh8.jpeg"
+            "image/anh7.jpeg"
         ];
 
-    const radius = Math.min(window.innerWidth, window.innerHeight) * 0.25;
+    const isMobile = window.innerWidth < 768;
+
+    const radius = isMobile
+    ? Math.min(window.innerWidth, window.innerHeight) * 0.45
+    : Math.min(window.innerWidth, window.innerHeight) * 0.38;
     const golden = Math.PI * (3 - Math.sqrt(5));
 
     photos.forEach((src, i) => {
@@ -680,8 +683,8 @@ function createOrbitPhotos3D() {
         el.style.transform = `
             translate3d(
                 ${x * radius}px,
-                ${y * radius * 0.6}px,
-                ${z * radius}px
+                ${y * radius * 0.9}px,
+                ${z * radius * 0.7}px
             )
         `;
 
