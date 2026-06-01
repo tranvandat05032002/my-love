@@ -432,7 +432,12 @@ function typing(){
         setTimeout(typing, 80);
     }
 }
-window.onload = typing;
+window.onload = function() {
+    typing(); // Chạy hiệu ứng gõ chữ
+    if (typeof initHeartParticles === "function") {
+        initHeartParticles(); // Kích hoạt lại trái tim hạt của bạn
+    }
+};
 
 const canvasIntro = document.getElementById("stars");
 const ctxIntro = canvasIntro.getContext("2d");
