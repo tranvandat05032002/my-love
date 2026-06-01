@@ -562,7 +562,7 @@ window.addEventListener("resize", resizeHeartCanvas);
 
 function initHeartParticles() {
     heartParticles = [];
-    const numParticles = window.innerWidth < 768 ? 2500 : 9500;
+    const numParticles = window.innerWidth < 768 ? 1800 : 6000;
 
     for (let i = 0; i < numParticles; i++) {
         // Phương trình toán học chuẩn của trái tim Lý Tuân
@@ -572,7 +572,7 @@ function initHeartParticles() {
         
         let type = Math.random();
         let targetX, targetY, targetZ, color, size, speed;
-        let scale = 11; // Phóng to
+        let scale = window.innerWidth < 768 ? 6 : 11;
 
         if (type < 0.20) { 
             // LỚP 1: HÀO QUANG (Halo) - Phân tán ra bên ngoài
@@ -604,8 +604,8 @@ function initHeartParticles() {
         }
 
         // Tọa độ xuất phát tán loạn từ ngoài vào
-        let startX = (Math.random() - 0.5) * window.innerWidth * 2.5;
-        let startY = (Math.random() - 0.5) * window.innerHeight * 2.5;
+        let startX = (Math.random() - 0.5) * window.innerWidth * 1.5;
+        let startY = (Math.random() - 0.5) * window.innerHeight * 1.5;
         let startZ = (Math.random() - 0.5) * 2000;
 
         heartParticles.push({
